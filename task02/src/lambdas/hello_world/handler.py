@@ -1,3 +1,4 @@
+import json
 from commons.log_helper import get_logger
 from commons.abstract_lambda import AbstractLambda
 
@@ -14,7 +15,21 @@ class HelloWorld(AbstractLambda):
         Explain incoming event here
         """
         if "rawPath" in event and event["rawPath"] == "/hello":
-            return {"status_code": 200, "message": "Hello from Lambda"}
+            res = {
+                    "headers": {
+                        "Content-Type": "application/json"
+                        },
+                    "statusCode": 200,
+                    "body": json.dumps(
+                        {
+                            "statusCode": 200, 
+                            "message": "Hello from Lambda"
+                            }
+                        )
+                    }
+
+            return res
+
         return 200
     
 
@@ -23,3 +38,4 @@ HANDLER = HelloWorld()
 
 def lambda_handler(event, context):
     return HANDLER.lambda_handler(event=event, context=context)
+
