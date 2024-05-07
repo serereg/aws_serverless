@@ -6,11 +6,11 @@ from datetime import datetime
 from commons.log_helper import get_logger
 from commons.abstract_lambda import AbstractLambda
 
-_LOG = get_logger('ApiHandler-handler')
+_LOG = get_logger('AuditProducer-handler')
 
 dynamodb = boto3.resource('dynamodb')
-table_configuration = 'cmtr-9766e57a-Configuration'
-table_audit = 'cmtr-9766e57a-Audit'
+table_configuration = 'cmtr-9766e57a-Configuration-test'
+table_audit = 'cmtr-9766e57a-Audit-test'
 
 
 class AuditProducer(AbstractLambda):
@@ -31,6 +31,16 @@ class AuditProducer(AbstractLambda):
         #                              'SequenceNumber': '2500000000026925944438', 'SizeBytes': 22, 
         #                              'StreamViewType': 'NEW_AND_OLD_IMAGES'}, 
         #                 'eventSourceARN': 'arn:aws:dynamodb:eu-central-1:905418349556:table/cmtr-9766e57a-Configuration/stream/2024-05-06T20:26:53.544'}]}
+        if event['Records'][0]['eventName'] == 'INSERT':
+            record = {
+                    "id": str(uuid.uuid4()),
+                    "itemKey": event['Records'][0]['dynamodb']['Keys']['key']['S'],
+                    "modificationTime": datetime.utcnow().isoformat(),
+                    "newValue": {
+                        "key": event['Records'][0]['dynamodb']['NewImage']['key']['S'],
+                        "value": int(event['Records'][0]['dynamodb']['NewImage']['value']['N'])
+                        }
+                    }
         # {'Records': [{'eventID': '2711017d141aa1b35c3a11f0fe973ce0', 'eventName': 'MODIFY', 
         #                 'eventVersion': '1.1', 'eventSource': 'aws:dynamodb', 'awsRegion': 'eu-central-1', 
         #                 'dynamodb': {'ApproximateCreationDateTime': 1715027498.0, 
@@ -40,16 +50,18 @@ class AuditProducer(AbstractLambda):
         #                              'SequenceNumber': '2600000000026925951902', 'SizeBytes': 37, 
         #                              'StreamViewType': 'NEW_AND_OLD_IMAGES'}, 
         #                 'eventSourceARN': 'arn:aws:dynamodb:eu-central-1:905418349556:table/cmtr-9766e57a-Configuration/stream/2024-05-06T20:26:53.544'}]}
-        stub = {
-                "id": str(uuid.uuid4()),
-                "itemKey": "CACHE_TTL_SEC",
-                "modificationTime": datetime.utcnow().isoformat(),
-                "newValue": {
-                    "key": "CACHE_TTL_SEC",
-                    "value": 3600
-                    },
-                } 
-        record = stub
+        elif event['Records'][0]['eventName'] == 'MODIFY':
+            record = {
+                    "id": str(uuid.uuid4()),
+                    "itemKey": event['Records'][0]['dynamodb']['Keys']['key']['S'],
+                    "modificationTime": datetime.utcnow().isoformat(),
+                    "updatedAttribute": "value",
+                    "oldValue": int(event['Records'][0]['dynamodb']['OldImage']['value']['N']),
+                    "newValue": int(event['Records'][0]['dynamodb']['NewImage']['value']['N'])
+                    }
+        else:
+            record = {}
+
         _LOG.info(record)
 
         table = dynamodb.Table(table_audit)
