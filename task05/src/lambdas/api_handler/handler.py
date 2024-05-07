@@ -9,7 +9,7 @@ from commons.abstract_lambda import AbstractLambda
 _LOG = get_logger('ApiHandler-handler')
 
 dynamodb = boto3.resource('dynamodb')
-table_name = 'cmtr-9766e57a-Events'
+table_name = 'cmtr-9766e57a-Events-test'
 
 
 class ApiHandler(AbstractLambda):
