@@ -1,4 +1,5 @@
 import json
+import os
 import uuid
 import boto3
 from decimal import Decimal
@@ -11,8 +12,6 @@ from commons.abstract_lambda import AbstractLambda
 _LOG = get_logger('Processor-handler')
 
 dynamodb = boto3.resource('dynamodb')
-table_name = 'cmtr-9766e57a-Weather'
-
 
 class Processor(AbstractLambda):
 
@@ -82,6 +81,8 @@ class Processor(AbstractLambda):
 
             item = json.loads(json.dumps(record), parse_float=Decimal)
 
+            table_name = os.environ['TARGET_TABLE']
+            _LOG.info(f"{table_name=}")
             table = dynamodb.Table(table_name)
             table.put_item(Item=item)
 
