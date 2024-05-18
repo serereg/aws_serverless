@@ -25,7 +25,8 @@ class Processor(AbstractLambda):
         _LOG.info(event)
 
         # todo implement business logic
-        if "rawPath" in event and event["rawPath"] == "/weather":
+        # if "rawPath" in event and event["rawPath"] == "/weather":
+        if "rawPath" in event and (event["rawPath"] in ["/weather", "/"]) :
             response = requests.get("https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m")
             # weather = response.json(parse_float=Decimal)
             weather = response.json()
