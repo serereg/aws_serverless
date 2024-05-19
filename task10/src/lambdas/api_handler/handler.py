@@ -1,3 +1,5 @@
+import os
+
 from commons.log_helper import get_logger
 from commons.abstract_lambda import AbstractLambda
 
@@ -14,7 +16,14 @@ class ApiHandler(AbstractLambda):
         Explain incoming event here
         """
         # todo implement business logic
-        return 200
+        _LOG.info(f"{event=}")
+        reservations_table = os.environ['RESERVATIONS_TABLE']
+        tables_table = os.environ['TABLES_TABLE']
+        user_pool_name = os.environ['USER_POOL']
+        _LOG.info(f"{reservations_table=}")
+        _LOG.info(f"{tables_table=}")
+        _LOG.info(f"{user_pool_name=}")
+        return {"event": event}
     
 
 HANDLER = ApiHandler()
