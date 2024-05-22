@@ -60,7 +60,7 @@ class ApiHandler(AbstractLambda):
                 _LOG.info("reservations post")
                 item = json.loads(event['body'])
                 reservation_id = uuid4()
-                response = reservations_table.put_item(Item={"reservationId": reservation_id, **item})
+                response = reservations_table.put_item(Item={"id": reservation_id, **item})
                 _LOG.info(response)
                 return {"statusCode": 200, 
                         "body": json.dumps({"reservationId": reservation_id})
