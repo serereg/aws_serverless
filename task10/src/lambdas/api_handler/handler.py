@@ -175,6 +175,10 @@ class ApiHandler(AbstractLambda):
             elif event['resource'] == '/tables/{tableId}' and event['httpMethod'] == 'GET':
                 table_id = int(event['path'].split('/')[-1])
                 _LOG.info(f"{table_id=}")
+                item = tables_table.get_item(Key={'id': int(table_id)})
+                body = json.dumps(item, default=decimal_serializer)
+                _LOG.info(f"{body=}")
+                return {"statusCode": 200, "body": body}
                 
             elif event['path'] == '/reservations' and event['httpMethod'] == 'POST':
                 _LOG.info("reservations post")
