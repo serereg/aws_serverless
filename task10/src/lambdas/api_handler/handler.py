@@ -18,6 +18,15 @@ def decimal_serializer(obj):
     raise TypeError("Type not serializable")
 
 
+def check_table_existence(tables_table, table_number):
+    response = tables_table.scan()
+    tables = response['Items']
+    for table in tables:
+        if table["number"] == table_number:
+            return
+    raise KeyError("Not existing table")
+
+
 class ApiHandler(AbstractLambda):
 
     def validate_request(self, event) -> dict:
@@ -183,6 +192,10 @@ class ApiHandler(AbstractLambda):
             elif event['path'] == '/reservations' and event['httpMethod'] == 'POST':
                 _LOG.info("reservations post")
                 item = json.loads(event['body'])
+                try:
+                    check_table_existence(tables_table, item["tableNumber"])
+                except KeyError:
+                    return {"statusCode": 400, "body": json.dumps({"error": "table does not exist"})}
                 reservation_id = str(uuid4())
                 response = reservations_table.put_item(Item={"id": reservation_id, **item})
                 _LOG.info(response)
