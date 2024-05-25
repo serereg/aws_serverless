@@ -183,7 +183,7 @@ class ApiHandler(AbstractLambda):
             elif event['path'] == '/reservations' and event['httpMethod'] == 'POST':
                 _LOG.info("reservations post")
                 item = json.loads(event['body'])
-                reservation_id = uuid4()
+                reservation_id = str(uuid4())
                 response = reservations_table.put_item(Item={"id": reservation_id, **item})
                 _LOG.info(response)
                 return {"statusCode": 200, 
