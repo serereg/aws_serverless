@@ -1,5 +1,6 @@
 import json
 import os
+from decimal import Decimal
 from uuid import uuid4
 
 import boto3
@@ -9,6 +10,13 @@ from commons.abstract_lambda import AbstractLambda
 _LOG = get_logger('ApiHandler-handler')
 
 CLIENT_APP = 'client_app'
+
+
+def decimal_serializer(obj):
+    if isinstance(obj, Decimal):
+        return int(obj)
+    raise TypeError("Type not serializable")
+
 
 class ApiHandler(AbstractLambda):
 
@@ -157,7 +165,12 @@ class ApiHandler(AbstractLambda):
                 response = tables_table.scan()
                 items = response['Items']
                 _LOG.info(items)
-                return {"statusCode": 200, "body": json.dumps(items)}
+                items = sorted(items, key=lambda item: item['id'])
+                tables = {'tables': sorted(items, key=lambda item: item['id'])}
+                _LOG.info(tables)
+                body = json.dumps(tables, default=decimal_serializer)
+                _LOG.info(body)
+                return {"statusCode": 200, "body": body}
 
             elif event['resource'] == '/tables/{tableId}' and event['httpMethod'] == 'GET':
                 table_id = int(event['path'].split('/')[-1])
@@ -178,7 +191,7 @@ class ApiHandler(AbstractLambda):
                 response = reservations_table.scan()
                 items = response['Items']
                 _LOG.info(items)
-                return {"statusCode": 200, "body": json.dumps(items)}
+                return {"statusCode": 200, "body": json.dumps(items, default=decimal_serializer)}
 
             else:
                 raise KeyError("no method")
