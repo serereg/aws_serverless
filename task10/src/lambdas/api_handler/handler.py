@@ -176,7 +176,7 @@ class ApiHandler(AbstractLambda):
                 table_id = int(event['path'].split('/')[-1])
                 _LOG.info(f"{table_id=}")
                 item = tables_table.get_item(Key={'id': int(table_id)})
-                body = json.dumps(item, default=decimal_serializer)
+                body = json.dumps(item["Item"], default=decimal_serializer)
                 _LOG.info(f"{body=}")
                 return {"statusCode": 200, "body": body}
                 
