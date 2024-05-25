@@ -62,17 +62,46 @@ class ApiHandler(AbstractLambda):
                         app_client_id = app_client['ClientId']
                 _LOG.info(f'{app_client_id =}')
 
-                response = client.sign_up(ClientId=app_client_id, 
-                                          Username=first_name, 
-                                          Password=password, 
-                                          UserAttributes=[{"Name": "email", "Value": email }]
-                                          )
-                _LOG.info(f'{response =}')
+                # response = client.sign_up(ClientId=app_client_id, 
+                #                           Username=first_name, 
+                #                           Password=password, 
+                #                           UserAttributes=[{"Name": "email", "Value": email }]
+                #                           )
+                # _LOG.info(f'{response =}')
 
+                response = client.admin_create_user(
+                    UserPoolId=user_pool_id,
+                    Username=email,
+                    UserAttributes=[
+                        {
+                            'Name': 'email',
+                            'Value': email
+                        },
+                        {
+                            'Name': 'given_name',
+                            'Value': first_name
+                        },
+                        {
+                            'Name': 'family_name',
+                            'Value': last_name
+                        },
+                    ],
+                    TemporaryPassword=password,
+                    MessageAction='SUPPRESS'
+                )
+                _LOG.info(f'{response=}')
+
+                response = client.admin_set_user_password(
+                    UserPoolId=user_pool_id,
+                    Username=email,
+                    Password=password,
+                    Permanent=True
+                )
+                _LOG.info(f'{response=}')
 
             elif event['path'] == '/signin' and event['httpMethod'] == 'POST':
-                _LOG.info("signip post")
                 body = json.loads(event['body'])
+                _LOG.info("signip post")
 
                 email = body['email']
                 password = body['password']
