@@ -42,7 +42,8 @@ class ApiHandler(AbstractLambda):
                 item = json.loads(event['body'])
                 response = tables_table.put_item(Item=item)
                 _LOG.info(response)
-                return {"statusCode": 200, 
+                return {
+                        "statusCode": 200, 
                         "body": json.dumps({"id": item["id"]})
                         }
 
@@ -90,7 +91,7 @@ class ApiHandler(AbstractLambda):
 
             _LOG.info(f'{message=}')
             return message
-        return {"statusCode": 200, "event": event}
+        return {"statusCode": 200, "body": json.dumps(event)}
     
 
 HANDLER = ApiHandler()
