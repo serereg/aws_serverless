@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime
 from decimal import Decimal
 from uuid import uuid4
 
@@ -192,10 +193,28 @@ class ApiHandler(AbstractLambda):
             elif event['path'] == '/reservations' and event['httpMethod'] == 'POST':
                 _LOG.info("reservations post")
                 item = json.loads(event['body'])
+                proposed_table_number = item["tableNumber"]
                 try:
-                    check_table_existence(tables_table, item["tableNumber"])
+                    check_table_existence(tables_table, proposed_table_number)
                 except KeyError:
                     return {"statusCode": 400, "body": json.dumps({"error": "table does not exist"})}
+                _LOG.info(f"{proposed_table_number=}")
+
+                proposed_slot_time_start = datetime.strptime(item["slotTimeStart"], "%H:%M").time()
+                proposed_slot_time_end = datetime.strptime(item["slotTimeEnd"], "%H:%M").time()
+                response = reservations_table.scan()
+                _LOG.info(f"{response=}")
+                reservations = response['Items']
+                for r in reservations:
+                    if r["tableNumber"] != proposed_table_number:
+                        continue
+                    if r["date"] != item["date"]:
+                        continue
+                    existing_slot_time_start = datetime.strptime(r["slotTimeStart"], "%H:%M").time()
+                    existing_slot_time_end = datetime.strptime(r["slotTimeEnd"], "%H:%M").time()
+                    if any([existing_slot_time_start <= proposed_slot_time <= existing_slot_time_end 
+                            for proposed_slot_time in (proposed_slot_time_start, proposed_slot_time_end)]):
+                        return {"statusCode": 400, "body": json.dumps({"error": "time slots are overlapping with existing reservations"})}
                 reservation_id = str(uuid4())
                 response = reservations_table.put_item(Item={"id": reservation_id, **item})
                 _LOG.info(response)
