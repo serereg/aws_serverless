@@ -17,6 +17,8 @@
   "paths": {
     "/reservations": {
       "get": {
+        "summary": "Reservations get",
+        "description": "Reservations get",
         "responses": {
           "200": {
             "description": "200 response",
@@ -47,6 +49,18 @@
         }
       },
       "post": {
+        "summary": "Reservations post",
+        "description": "Reservations post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "200 response",
@@ -79,6 +93,8 @@
     },
     "/tables": {
       "get": {
+        "summary": "Tables get",
+        "description": "Tables get",
         "responses": {
           "200": {
             "description": "200 response",
@@ -109,6 +125,18 @@
         }
       },
       "post": {
+        "summary": "Tables post",
+        "description": "Tables  post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "200 response",
@@ -141,6 +169,18 @@
     },
     "/signin": {
       "post": {
+        "summary": "Signin",
+        "description": "Signin",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Empty"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "200 response",
@@ -168,6 +208,8 @@
     },
     "/tables/{tableId}": {
       "get": {
+        "summary": "Tables N",
+        "description": "Tables N",
         "parameters": [
           {
             "name": "tableId",
@@ -210,6 +252,8 @@
     },
     "/test": {
       "get": {
+        "summary": "Test",
+        "description": "Test",
         "responses": {
           "200": {
             "description": "200 response",
