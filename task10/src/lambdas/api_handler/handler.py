@@ -227,10 +227,18 @@ class ApiHandler(AbstractLambda):
                 response = reservations_table.scan()
                 items = response['Items']
                 _LOG.info(items)
-                return {"statusCode": 200, "body": json.dumps(items, default=decimal_serializer)}
+                for i in items:
+                    del i["id"]
+                _LOG.info(items)
+                items = sorted(items, key=lambda item: item['tableNumber'])
+                _LOG.info(items)
+                reservations = {"reservations": items}
+                _LOG.info(reservations)
+                return {"statusCode": 200, "body": json.dumps(reservations, default=decimal_serializer)}
 
             else:
                 raise KeyError("no method")
+
         except Exception as e:
             _LOG.info('Bad request')
             _LOG.info(f'Error: {e}')
