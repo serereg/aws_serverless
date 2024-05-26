@@ -242,6 +242,18 @@
     },
     "/signup": {
       "post": {
+        "summary": "Signup",
+        "description": "Signup",
+        "requestBody":{
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Signup"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "200 response",
@@ -270,6 +282,25 @@
   },
   "components": {
     "schemas": {
+      "Signup": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": ["firstName", "lastName", "email", "password"]
+      },
       "Empty": {
         "title": "Empty Schema",
         "type": "object"
