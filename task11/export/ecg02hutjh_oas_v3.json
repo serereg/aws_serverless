@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "title": "",
+    "title": "task11_api",
     "version": "2024-05-26T11:22:34Z"
   },
   "servers": [
@@ -31,12 +31,12 @@
         },
         "security": [
           {
-            "task10-authorizer": []
+            "authorizer": []
           }
         ],
         "x-amazon-apigateway-integration": {
           "httpMethod": "POST",
-          "uri": ":::::::::::",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
           "responses": {
             "default": {
               "statusCode": "200"
@@ -61,12 +61,12 @@
         },
         "security": [
           {
-            "task10-authorizer": []
+            "authorizer": []
           }
         ],
         "x-amazon-apigateway-integration": {
           "httpMethod": "POST",
-          "uri": ":::::::::::",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
           "responses": {
             "default": {
               "statusCode": "200"
@@ -93,12 +93,12 @@
         },
         "security": [
           {
-            "task10-authorizer": []
+            "authorizer": []
           }
         ],
         "x-amazon-apigateway-integration": {
           "httpMethod": "POST",
-          "uri": ":::::::::::",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
           "responses": {
             "default": {
               "statusCode": "200"
@@ -123,12 +123,12 @@
         },
         "security": [
           {
-            "task10-authorizer": []
+            "authorizer": []
           }
         ],
         "x-amazon-apigateway-integration": {
           "httpMethod": "POST",
-          "uri": ":::::::::::",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
           "responses": {
             "default": {
               "statusCode": "200"
@@ -155,7 +155,7 @@
         },
         "x-amazon-apigateway-integration": {
           "httpMethod": "POST",
-          "uri": ":::::::::::",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
           "responses": {
             "default": {
               "statusCode": "200"
@@ -192,12 +192,12 @@
         },
         "security": [
           {
-            "task10-authorizer": []
+            "authorizer": []
           }
         ],
         "x-amazon-apigateway-integration": {
           "httpMethod": "POST",
-          "uri": ":::::::::::",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
           "responses": {
             "default": {
               "statusCode": "200"
@@ -224,12 +224,12 @@
         },
         "security": [
           {
-            "task10-authorizer": []
+            "authorizer": []
           }
         ],
         "x-amazon-apigateway-integration": {
           "httpMethod": "POST",
-          "uri": ":::::::::::",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
           "responses": {
             "default": {
               "statusCode": "200"
@@ -256,7 +256,7 @@
         },
         "x-amazon-apigateway-integration": {
           "httpMethod": "POST",
-          "uri": ":::::::::::",
+          "uri": "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-central-1:905418349556:function:api_handler/invocations",
           "responses": {
             "default": {
               "statusCode": "200"
@@ -276,7 +276,7 @@
       }
     },
     "securitySchemes": {
-      "task10-authorizer": {
+      "authorizer": {
         "type": "apiKey",
         "name": "Authorization",
         "in": "header",
